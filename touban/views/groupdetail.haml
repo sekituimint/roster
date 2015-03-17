@@ -1,0 +1,15 @@
+%h1 #{@name}
+%h2 メンバー一覧
+%form{:action => '/', :method => 'post'}
+  %p
+    %label{:for => "name"} スケジュール名:
+    %input{:name => "name", :type => "text", :value => ""}
+  %p
+    %label{:for => "mini"} 略称:
+    %input{:name => "mini", :type => "text", :value => ""}
+  %p
+    %label{:for => "interval"} 間隔:1週間
+  %p
+    %label{:for => "renew"} 開始:月曜日
+  %p
+    %input{:type => "submit", :value => "登録"}

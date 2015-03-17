@@ -1,0 +1,42 @@
+.navbar.navbar-inverse
+  .navbar-inner
+    .container-fluid
+      %a.brand{:href => '/'}
+        お掃除
+      .nav-collapse.collapse
+        %ul.nav
+          - @idlist.each_with_index do |id,i|
+            %li
+              %a{:href => '/config/' + "#{id}"}
+                #{@minilist[i]}
+.row-fluid
+  .span6
+    %h1 お掃除スクリプト
+    - @grouplist.each_with_index  do |user,i|
+      %h2 #{@namelist[i]}
+      %table{:class => "table table-hover"}
+        %thead
+          %tr
+            %th 日程　　　　　　　　
+            %th 名前　　　　　　　　
+            %th 状態
+        %tbody
+          %tr{:class => "info"}
+            %td #{@daylist[0]}  ~ #{@daylist[1]}
+            %td
+              = user[0].name
+            %td 未完了
+          %tr
+            %td #{@daylist[1]} ~ #{@daylist[2]}
+            %td
+              = user[1].name
+            %td 次回
+          %tr
+            %td #{@daylist[2]} ~ #{@daylist[3]}
+            %td
+              = user[2].name
+            %td 次々回
+      %a{:type => "button", :class=>"btn btn-default", :href =>"/",}完了
+    %br
+    %br
+    %a{:type => "button", :class=>"btn btn-default", :href =>"/atarashiihyou",}新規当番表作成

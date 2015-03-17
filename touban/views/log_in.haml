@@ -1,0 +1,11 @@
+%h1 Log In
+%form{:action => '/session', :method => 'post'}
+  %fieldset
+    %p
+      %label{:for => "email"} Email:
+      %input{:name => "email", :type => "text", :value => ""}
+    %p
+      %label{:for => "password"} Password:
+      %input{:name => "password", :type => "password", :value => ""}
+    %p
+      %input{:type => "submit", :value => "Log In"}
