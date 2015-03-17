@@ -22,18 +22,23 @@
             %th 状態
         %tbody
           - if @interlist[i] == 1
-            %tr{:class => "successs"}
+            %tr{:class => "success"}
               %td #{@daylist[0]}  ~ #{@daylist[1]}
               %td
                 = user[0].name
               %td 完了
+          - elsif @interlist[i] == 2
+            %tr{:class => "danger"}
+              %td #{@daylist[0]}  ~ #{@daylist[1]}
+              %td
+                = user[0].name
+              %td  遅延
           - else
             %tr{:class => "info"}
               %td #{@daylist[0]}  ~ #{@daylist[1]}
               %td
                 = user[0].name
               %td 未完了
-
           %tr
             %td #{@daylist[1]} ~ #{@daylist[2]}
             %td

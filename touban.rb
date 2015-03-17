@@ -31,6 +31,11 @@ use Rack::MethodOverride
 
 
 class MainApp < Sinatra::Base
+
+  configure :development do
+    register Sinatra::Reloader
+  end
+
   get '/' do
     groups = Group.all
     @grouplist = []
@@ -43,6 +48,10 @@ class MainApp < Sinatra::Base
     groups.each do |group|
       tmporder = group.noworder
       users = User.where(:groupid => group.id.to_s).sort_by{|user| user.order}
+      if tmporder >= users.size
+        tmporder = users.size - 1
+      end
+      byebug
       size = 3
       num = 0
       tmplist = []
@@ -76,8 +85,31 @@ class MainApp < Sinatra::Base
   #おそうじ完了時
   get '/kanryou/:id' do
     group = Group.where(:id => params[:id])
-    group[0].interval = 1
+    if group[0].interval == 0
+      group[0].interval = 1
+    elsif group[0].interval == 2
+      group[0].interval = 0
+      group[0].noworder += 1
+    else
+      group[0].interval = 0
+    end
     group[0].save
+    redirect '/'
+  end
+
+
+  #当番変更タイミングでの処理
+  get '/schedule/renew/' do
+    groups = Group.all
+    groups.each do |group|
+      if group.interval == 0
+        group.interval = 2
+      else
+        group.interval = 0
+        group.noworder += 1
+      end
+      group.save
+    end
     redirect '/'
   end
 
