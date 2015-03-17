@@ -21,11 +21,19 @@
             %th 名前　　　　　　　　
             %th 状態
         %tbody
-          %tr{:class => "info"}
-            %td #{@daylist[0]}  ~ #{@daylist[1]}
-            %td
-              = user[0].name
-            %td 未完了
+          - if @interlist[i] == 1
+            %tr{:class => "successs"}
+              %td #{@daylist[0]}  ~ #{@daylist[1]}
+              %td
+                = user[0].name
+              %td 完了
+          - else
+            %tr{:class => "info"}
+              %td #{@daylist[0]}  ~ #{@daylist[1]}
+              %td
+                = user[0].name
+              %td 未完了
+
           %tr
             %td #{@daylist[1]} ~ #{@daylist[2]}
             %td
@@ -36,7 +44,7 @@
             %td
               = user[2].name
             %td 次々回
-      %a{:type => "button", :class=>"btn btn-default", :href =>"/",}完了
+      %a{:type => "button", :class=>"btn btn-default", :href =>'/kanryou/' + "#{@idlist[i]}"}完了
     %br
     %br
     %a{:type => "button", :class=>"btn btn-default", :href =>"/atarashiihyou",}新規当番表作成
