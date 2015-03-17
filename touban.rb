@@ -7,6 +7,7 @@ require 'byebug' if development?
 require 'haml'
 require 'pony'
 
+require "sinatra/config_file"
 
 enable :sessions
 set :session_secret, "My session secret"
@@ -27,11 +28,18 @@ end
 use Rack::MethodOverride
 
 
-
 class MainApp < Sinatra::Base
-
   configure :development do
     register Sinatra::Reloader
+  end
+
+  configure do
+    register Sinatra::ConfigFile
+    config_file 'config.yml'
+  end
+
+  before do
+    @path_prefix = settings.path_prefix
   end
 
   get '/' do
@@ -49,7 +57,7 @@ class MainApp < Sinatra::Base
       if tmporder >= users.size
         tmporder = users.size - 1
       end
-      byebug
+      #byebug if development?
       size = 3
       num = 0
       tmplist = []
