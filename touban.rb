@@ -1,14 +1,12 @@
 # coding: utf-8
 require 'sinatra'
-require 'sinatra/base'
 require "sinatra/reloader" if development?
 require 'active_record'
 
-require 'byebug'
+require 'byebug' if development?
 require 'haml'
 require 'pony'
 
-register Sinatra::Reloader
 
 enable :sessions
 set :session_secret, "My session secret"
