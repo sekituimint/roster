@@ -14,7 +14,7 @@ set :session_secret, "My session secret"
 
 ActiveRecord::Base.establish_connection(
     adapter: 'sqlite3',
-    database: "db/development.sqlite3"
+    database: "#{@path_prefix}/db/development.sqlite3"
 )
 
 #グループごとのDB
