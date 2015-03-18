@@ -27,7 +27,6 @@ end
 
 use Rack::MethodOverride
 
-
 class MainApp < Sinatra::Base
   configure :development do
     register Sinatra::Reloader
