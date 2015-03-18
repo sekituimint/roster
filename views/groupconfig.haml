@@ -74,10 +74,10 @@
         %input{:type => "submit", :class=>"btn btn-default", :value => "登録"}
 
     %h2 グループの削除
-    %form{:action => "#{@path_prefix}/", :method => 'post'}
+    %form{:action => "#{@path_prefix}/deletegroup/" + "#{@id}", :method => 'post'}
       %p
         %label{:for => "name"} delete key:
-        %input{:name => "name", :type => "text", :value => ""}
+        %input{:type => "password", :class => "form-control",:name => "pass",  :value => ""}
       %p
-        %input{:type => "button", :class=>"btn btn-default", :value => "登録"}
+        %input{:type => "submit", :class=>"btn btn-default", :value => "削除"}
   .span6

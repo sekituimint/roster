@@ -56,12 +56,15 @@ class MainApp < Sinatra::Base
     @idlist = []
     @daylist = []
     @interlist = []
+    @nillist = []
     #トップに表示するユーザ3人をグループごとに決定
     groups.each do |group|
       tmporder = group.noworder
       users = User.where(:groupid => group.id.to_s).sort_by{|user| user.order}
-      if tmporder >= users.size
-        tmporder = users.size - 1
+      if users.size == 0
+        @nillist.push(true)
+      else
+        @nillist.push(false)
       end
       #byebug if development?
       size = 3
@@ -105,6 +108,10 @@ class MainApp < Sinatra::Base
     else
       group[0].interval = 0
     end
+    users = User.where(:groupid => group[0].id.to_s).sort_by{|user| user.order}
+    if users.size <= group[0].noworder
+      group[0].noworder = 0
+    end
     group[0].save
     redirect '/'
     #debug
@@ -120,6 +127,10 @@ class MainApp < Sinatra::Base
       else
         group.interval = 0
         group.noworder += 1
+      end
+      users = User.where(:groupid => group.id.to_s).sort_by{|user| user.order}
+      if users.size <= group.noworder
+        group.noworder = 0
       end
       group.save
     end
@@ -254,5 +265,16 @@ class MainApp < Sinatra::Base
       end
     end
     redirect '/config/' + params[:groupid]
+  end
+
+  #グループの削除
+  post '/deletegroup/:groupid' do
+    group = Group.where(:id => params[:groupid])
+    if params[:pass] == "Pnd#Li4!"
+      group[0].destroy
+      redirect '/'
+    else
+      redirect '/config/' + params[:groupid]
+    end
   end
 end

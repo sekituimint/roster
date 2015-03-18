@@ -14,42 +14,48 @@
     %h1 お掃除スクリプト
     - @grouplist.each_with_index  do |user,i|
       %h2 #{@namelist[i]}
-      %table{:class => "table table-hover"}
-        %thead
-          %tr
-            %th 日程　　　　　　　　
-            %th 名前　　　　　　　　
-            %th 状態
-        %tbody
-          - if @interlist[i] == 1
-            %tr{:class => "success"}
-              %td #{@daylist[0]}  ~ #{@daylist[1]}
+      - if @nillist[i] == true
+        %h3 メンバーが登録されていません
+        %br
+        %hr
+      - else
+        %table{:class => "table table-hover"}
+          %thead
+            %tr
+              %th 日程　　　　　　　　
+              %th 名前　　　　　　　　
+              %th 状態
+          %tbody
+            - if @interlist[i] == 1
+              %tr{:class => "success"}
+                %td #{@daylist[0]}  ~ #{@daylist[1]}
+                %td
+                  = user[0].name
+                %td 完了
+            - elsif @interlist[i] == 2
+              %tr{:class => "alert-danger"}
+                %td #{@daylist[0]}  ~ #{@daylist[1]}
+                %td
+                  = user[0].name
+                %td  遅延
+            - else
+              %tr{:class => "info"}
+                %td #{@daylist[0]}  ~ #{@daylist[1]}
+                %td
+                  = user[0].name
+                %td 未完了
+            %tr
+              %td #{@daylist[1]} ~ #{@daylist[2]}
               %td
-                = user[0].name
-              %td 完了
-          - elsif @interlist[i] == 2
-            %tr{:class => "danger"}
-              %td #{@daylist[0]}  ~ #{@daylist[1]}
+                = user[1].name
+              %td 次回
+            %tr
+              %td #{@daylist[2]} ~ #{@daylist[3]}
               %td
-                = user[0].name
-              %td  遅延
-          - else
-            %tr{:class => "info"}
-              %td #{@daylist[0]}  ~ #{@daylist[1]}
-              %td
-                = user[0].name
-              %td 未完了
-          %tr
-            %td #{@daylist[1]} ~ #{@daylist[2]}
-            %td
-              = user[1].name
-            %td 次回
-          %tr
-            %td #{@daylist[2]} ~ #{@daylist[3]}
-            %td
-              = user[2].name
-            %td 次々回
-      %a{:type => "button", :class=>"btn btn-default", :href =>"#{@path_prefix}/kanryou/" + "#{@idlist[i]}"}完了
-    %br
-    %br
+                = user[2].name
+              %td 次々回
+        %a{:type => "button", :class=>"btn btn-default", :href =>"#{@path_prefix}/kanryou/" + "#{@idlist[i]}"}完了
+        %br
+        %hr
     %a{:type => "button", :class=>"btn btn-default", :href =>"#{@path_prefix}/atarashiihyou",}新規当番表作成
+
