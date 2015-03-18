@@ -139,8 +139,8 @@ class MainApp < Sinatra::Base
 
   post '/' do
     #  title = "登板スクリプト"
-    #group = Group.new(:name => params[:name],:mini => params[:mini],:interval => 0,:renew => 0,:noworder => 0)
-    #group.save
+    group = Group.new(:name => params[:name],:mini => params[:mini],:interval => 0,:renew => 0,:noworder => 0)
+    group.save
     redirect "#{@path_prefix}/"
   end
 
