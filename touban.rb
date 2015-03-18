@@ -113,7 +113,7 @@ class MainApp < Sinatra::Base
       group[0].noworder = 0
     end
     group[0].save
-    redirect '/'
+    redirect "#{@path_prefix}/"
     #debug
   end
 
@@ -134,14 +134,14 @@ class MainApp < Sinatra::Base
       end
       group.save
     end
-    redirect '/'
+    redirect "#{@path_prefix}/"
   end
 
   post '/' do
     #  title = "登板スクリプト"
     #group = Group.new(:name => params[:name],:mini => params[:mini],:interval => 0,:renew => 0,:noworder => 0)
     #group.save
-    redirect '/'
+    redirect "#{@path_prefix}/"
   end
 
   get '/atarashiihyou' do
@@ -180,7 +180,7 @@ class MainApp < Sinatra::Base
     Pony.mail :to => 'hirai@mm.media.kyoto-u.ac.jp',
               :from => 'hirai@mm.media.kyoto-u.ac.jp',
               :subject => 'Howdy, Partna!'
-    redirect '/'
+    redirect "#{@path_prefix}/"
   end
 
   #新規ユーザ登録後戻ってくる画面
@@ -194,7 +194,7 @@ class MainApp < Sinatra::Base
     @noworder = group[0].noworder
     @groupid = group[0].id
     @id = group[0].id
-    redirect '/config/' + params[:id]
+    redirect "#{@path_prefix}/config/" + params[:id]
   end
 
   #上と順番を変更
@@ -218,7 +218,7 @@ class MainApp < Sinatra::Base
         group[0].save
       end
     end
-    redirect '/config/' + params[:groupid]
+    redirect "#{@path_prefix}config/" + params[:groupid]
   end
 
   #下と順番を変更
@@ -241,7 +241,7 @@ class MainApp < Sinatra::Base
         group[0].save
       end
   end
-    redirect '/config/' + params[:groupid]
+    redirect "#{@path_prefix}/config/" + params[:groupid]
   end
 
   #ポインタの現在値を変更
@@ -249,7 +249,7 @@ class MainApp < Sinatra::Base
     group = Group.where(:id => params[:groupid])
     group[0].noworder = params[:pointid]
     group[0].save
-    redirect '/config/' + params[:groupid]
+    redirect "#{@path_prefix}config/" + params[:groupid]
   end
 
   #ユーザーの削除
@@ -264,7 +264,7 @@ class MainApp < Sinatra::Base
         user.save
       end
     end
-    redirect '/config/' + params[:groupid]
+    redirect "#{@path_prefix}config/" + params[:groupid]
   end
 
   #グループの削除
@@ -272,9 +272,9 @@ class MainApp < Sinatra::Base
     group = Group.where(:id => params[:groupid])
     if params[:pass] == "Pnd#Li4!"
       group[0].destroy
-      redirect '/'
+      redirect "#{@path_prefix}/"
     else
-      redirect '/config/' + params[:groupid]
+      redirect "#{@path_prefix}/config/" + params[:groupid]
     end
   end
 end
