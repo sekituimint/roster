@@ -107,6 +107,7 @@ class MainApp < Sinatra::Base
     end
     group[0].save
     redirect '/'
+    #debug
   end
 
 
