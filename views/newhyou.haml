@@ -1,5 +1,5 @@
 %h1 新規予定表作成
-%form{:action => '/', :method => 'post'}
+%form{:action => "#{@path_prefix}/", :method => 'post'}
   %p
     %label{:for => "name"} スケジュール名:
     %input{:name => "name", :type => "text", :value => ""}

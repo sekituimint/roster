@@ -14,7 +14,7 @@ set :session_secret, "My session secret"
 
 ActiveRecord::Base.establish_connection(
     adapter: 'sqlite3',
-    database: 'db/development.sqlite3'
+    database: "db/development.sqlite3"
 )
 
 #グループごとのDB
@@ -33,10 +33,17 @@ class MainApp < Sinatra::Base
     register Sinatra::Reloader
   end
 
-  configure do
+  configure :development do
+    register Sinatra::ConfigFile
+    config_file 'config.yml'
+    settings.path_prefix = ''
+  end
+
+  configure :production do
     register Sinatra::ConfigFile
     config_file 'config.yml'
   end
+
 
   before do
     @path_prefix = settings.path_prefix

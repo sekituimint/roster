@@ -1,18 +1,18 @@
 .navbar.navbar-inverse
   .navbar-inner
     .container-fluid
-      %a.brand{:href => '/'}
+      %a.brand{:href => "#{@path_prefix}/"}
         お掃除
       .nav-collapse.collapse
         %ul.nav
           - @idlist.each_with_index do |id,i|
             - if id == @groupid
               %li.active
-                %a{:href => '/config/' + "#{id}"}
+                %a{:href => "#{@path_prefix}/config/" + "#{id}"}
                   #{@minilist[i]}
             - else
               %li
-                %a{:href => '/config/' + "#{id}"}
+                %a{:href => "#{@path_prefix}/config/" + "#{id}"}
                   #{@minilist[i]}
 .row-fluid
   .span6
@@ -32,14 +32,14 @@
                 =user.name
               %td
                 - if i != 0
-                  %a{:href => '/config/up/' + "#{@groupid}" + "/" + "#{i}"}
+                  %a{:href => "#{@path_prefix}/config/up/" + "#{@groupid}" + "/" + "#{i}"}
                     %input{:type => "button", :class=>"btn btn-mini", :value => "　↑　"}
               %td
                 - if i != @users.size.to_i - 1
-                  %a{:href => '/config/down/' + "#{@groupid}" + "/" + "#{i}"}
+                  %a{:href => "#{@path_prefix}/config/down/" + "#{@groupid}" + "/" + "#{i}"}
                     %input{:type => "button", :class=>"btn btn-mini", :value => "　↓　"}
               %td
-                %a{:href => '/config/delete/' + "#{@groupid}" + "/" + "#{i}"}
+                %a{:href => "#{@path_prefix}/config/delete/" + "#{@groupid}" + "/" + "#{i}"}
                   %input{:type => "button", :class=>"btn btn-mini", :value => " 削除 "}
               %td
                 %input{:type => "button", :class=>"btn btn-mini", :value => "ポインタ移動"}
@@ -49,21 +49,21 @@
                 =user.name
               %td
                 - if i != 0
-                  %a{:href => '/config/up/' + "#{@groupid}" + "/" + "#{i}"}
+                  %a{:href => "#{@path_prefix}/config/up/" + "#{@groupid}" + "/" + "#{i}"}
                     %input{:type => "button", :class=>"btn btn-mini", :value => "　↑　"}
               %td
                 - if i != @users.size.to_i - 1
-                  %a{:href => '/config/down/' + "#{@groupid}" + "/" + "#{i}"}
+                  %a{:href => "#{@path_prefix}/config/down/" + "#{@groupid}" + "/" + "#{i}"}
                     %input{:type => "button", :class=>"btn btn-mini", :value => "　↓　"}
               %td
-                %a{:href => '/config/delete/' + "#{@groupid}" + "/" + "#{i}"}
+                %a{:href => "#{@path_prefix}/config/delete/" + "#{@groupid}" + "/" + "#{i}"}
                   %input{:type => "button", :class=>"btn btn-mini", :value => " 削除 "}
               %td
-                %a{:href => '/config/point/' + "#{@groupid}" + "/" + "#{i}"}
+                %a{:href => "#{@path_prefix}/config/point/" + "#{@groupid}" + "/" + "#{i}"}
                   %input{:type => "button", :class=>"btn btn-mini", :value => "ポインタ移動"}
 
     %h2 新規メンバーの追加
-    %form{:action => '/config/' + "#{@id}" , :method => 'post'}
+    %form{:action => "#{@path_prefix}/config/" + "#{@id}" , :method => 'post'}
       %p
         %label{:for => "name"} 名前:
         %input{:name => "name", :type => "text", :value => ""}
@@ -74,7 +74,7 @@
         %input{:type => "submit", :class=>"btn btn-default", :value => "登録"}
 
     %h2 グループの削除
-    %form{:action => '/', :method => 'post'}
+    %form{:action => "#{@path_prefix}/", :method => 'post'}
       %p
         %label{:for => "name"} delete key:
         %input{:name => "name", :type => "text", :value => ""}
