@@ -194,6 +194,9 @@ class MainApp < Sinatra::Base
     @noworder = group[0].noworder
     @groupid = group[0].id
     @id = group[0].id
+    Pony.mail :to => params[:email],
+              :from => 'hirai@mm.media.kyoto-u.ac.jp',
+              :subject => '登録完了しました。'
     redirect "#{@path_prefix}/config/" + params[:id]
   end
 
