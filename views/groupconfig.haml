@@ -23,7 +23,9 @@
         %tr
           %th 名前　　　　　　　　　　　　　　　　　　　　　
           %th 上へ
-          %th 状態
+          %th 下へ
+          %th
+          %th
       %tbody
         - @users.each_with_index do |user,i|
           - if @noworder == user.order
