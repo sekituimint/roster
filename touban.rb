@@ -109,7 +109,7 @@ class MainApp < Sinatra::Base
     nowuser = User.where(:groupid => group[0].id.to_s, :order => group[0].noworder)
     if group[0].interval != 1
       Pony.mail :to => nowuser[0].email,
-                :from => 'hirai@mm.media.kyoto-u.ac.jp',
+                :from => 'roster@mm.media.kyoto-u.ac.jp',
                 :subject => '【' + group[0].name + '】完了しました',
                 :body => nowuser[0].name + "さん
 " + group[0].name + "の当番完了を受理しました。
@@ -126,7 +126,7 @@ class MainApp < Sinatra::Base
       end
       nextuser = User.where(:groupid => group[0].id.to_s, :order => group[0].noworder)
       Pony.mail :to => nextuser[0].email,
-                :from => 'hirai@mm.media.kyoto-u.ac.jp',
+                :from => 'roster@mm.media.kyoto-u.ac.jp',
                 :subject => '【' + group[0].name + '】今週の当番のお知らせ',
                 :body => nextuser[0].name + "さん
 " + group[0].name + "の今週の掃除当番をお願いします。
@@ -195,7 +195,7 @@ R412の掃除---------------------------------
 "
       end
       Pony.mail :to => nowuser[0].email,
-                :from => 'hirai@mm.media.kyoto-u.ac.jp',
+                :from => 'roster@mm.media.kyoto-u.ac.jp',
                 :subject => title,
                 :body => nowuser[0].name + "さん
 " + group.name + "の今週の掃除当番をお願いします。
@@ -289,7 +289,7 @@ R412の掃除---------------------------------
     @groupid = group[0].id
     @id = group[0].id
     Pony.mail :to => params[:email],
-              :from => 'hirai@mm.media.kyoto-u.ac.jp',
+              :from => 'roster@mm.media.kyoto-u.ac.jp',
               :subject => '【' + @name + '】登録完了しました。',
               :body => params[:name] + "さん
 " + @name + "へのユーザー登録が完了しました。"
