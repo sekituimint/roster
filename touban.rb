@@ -54,6 +54,7 @@ class MainApp < Sinatra::Base
     @namelist = []
     @minilist = []
     @idlist = []
+    daylist = []
     @daylist = []
     @interlist = []
     @nillist = []
@@ -70,6 +71,7 @@ class MainApp < Sinatra::Base
       size = 3
       num = 0
       tmplist = []
+      daylist = []
       while num != size do
         tmplist.push(users[tmporder])
         tmporder += 1
@@ -83,11 +85,15 @@ class MainApp < Sinatra::Base
       while day.wday != 1 do
         day -= 24*60*60
       end
-      4.times do
+      if group.interval > 1
+        day -= 24*60*60*7*(group.interval - 1)
+      end
+      4.times() do
         d = day.year.to_s + "/" + "%02d" % day.month.to_s  + "/" + "%02d" % day.day.to_s
-        @daylist.push(d)
+        daylist.push(d)
         day += 24*60*60*7
       end
+      @daylist.push(daylist)
       @grouplist.push(tmplist)
       @namelist.push(group.name)
       @minilist.push(group.mini)
@@ -100,18 +106,59 @@ class MainApp < Sinatra::Base
   #おそうじ完了時
   get '/kanryou/:id' do
     group = Group.where(:id => params[:id])
+    nowuser = User.where(:groupid => group[0].id.to_s, :order => group[0].noworder)
+    if group[0].interval != 1
+      Pony.mail :to => nowuser[0].email,
+                :from => 'hirai@mm.media.kyoto-u.ac.jp',
+                :subject => '【' + group[0].name + '】完了しました',
+                :body => nowuser[0].name + "さん
+" + group[0].name + "の当番完了を受理しました。
+ご苦労様でした。"
+    end
     if group[0].interval == 0
       group[0].interval = 1
     elsif group[0].interval == 2
       group[0].interval = 0
       group[0].noworder += 1
-    else
-      group[0].interval = 0
+      users = User.where(:groupid => group[0].id.to_s).sort_by{|user| user.order}
+      if users.size <= group[0].noworder
+        group[0].noworder = 0
+      end
+      nextuser = User.where(:groupid => group[0].id.to_s, :order => group[0].noworder)
+      Pony.mail :to => nextuser[0].email,
+                :from => 'hirai@mm.media.kyoto-u.ac.jp',
+                :subject => '【' + group[0].name + '】今週の当番のお知らせ',
+                :body => nextuser[0].name + "さん
+" + group[0].name + "の今週の掃除当番をお願いします。
+掃除の内容については，美濃研マニュアルを参照してください．
+
+終わりましたら、当番表のページhttp://kusk.mm.media.kyoto-u.ac.jp/roster/
+にアクセスして、完了ボタンを押してください。
+(※完了ボタンを押さないと遅延扱いになります！)
+
+
+R412の掃除---------------------------------
+1:ゴミ袋がまんぱんになれば捨てに行きます.
+2:月，木曜日にみんなのゴミを集めます.
+3:金曜日に掃除機をかけます.
+
+
+キッチンの掃除-----------------------------
+1: ゴミ捨て
+  ・三角コーナー、排水口のゴミ
+  ・ゴミ箱のゴミ
+  ・新聞
+　　　ある程度たまったら紐で結んで束にして下さい．
+
+2:机と床の掃除
+  ・机の上
+　　　布巾で拭き、布巾はきれいに洗って干しておいてください。
+　・床
+　　　掃除機をかけ、「フロアクイックル」でみがいて下さい
+
+-------------------------------------------"
     end
-    users = User.where(:groupid => group[0].id.to_s).sort_by{|user| user.order}
-    if users.size <= group[0].noworder
-      group[0].noworder = 0
-    end
+
     group[0].save
     redirect "#{@path_prefix}/"
     #debug
@@ -124,15 +171,62 @@ class MainApp < Sinatra::Base
     groups.each do |group|
       if group.interval == 0
         group.interval = 2
-      else
+      elsif group.interval == 1
         group.interval = 0
         group.noworder += 1
+      else
+        group.interval += 1
       end
       users = User.where(:groupid => group.id.to_s).sort_by{|user| user.order}
       if users.size <= group.noworder
         group.noworder = 0
       end
       group.save
+      #メール送信のアレ
+      nowuser = User.where(:groupid => group.id.to_s, :order => group.noworder)
+      #ちゃんとやってる時
+      if group.interval == 0
+        title = '【' + group.name + '】今週の当番のお知らせ'
+        tientitle = ""
+      else
+        title = '【' + group.name + '】今週の当番のお知らせ【遅延】'
+        tientitle = "
+前回担当から遅延していますので、早急に掃除を行ってください。
+"
+      end
+      Pony.mail :to => nowuser[0].email,
+                :from => 'hirai@mm.media.kyoto-u.ac.jp',
+                :subject => title,
+                :body => nowuser[0].name + "さん
+" + group.name + "の今週の掃除当番をお願いします。
+"+ tientitle + "
+掃除の内容については，美濃研マニュアルを参照してください．
+
+終わりましたら、当番表のページhttp://kusk.mm.media.kyoto-u.ac.jp/roster/
+にアクセスして、完了ボタンを押してください。
+(※完了ボタンを押さないと遅延扱いになります！)
+
+
+R412の掃除---------------------------------
+1:ゴミ袋がまんぱんになれば捨てに行きます.
+2:月，木曜日にみんなのゴミを集めます.
+3:金曜日に掃除機をかけます.
+
+
+キッチンの掃除-----------------------------
+1: ゴミ捨て
+  ・三角コーナー、排水口のゴミ
+  ・ゴミ箱のゴミ
+  ・新聞
+　　　ある程度たまったら紐で結んで束にして下さい．
+
+2:机と床の掃除
+  ・机の上
+　　　布巾で拭き、布巾はきれいに洗って干しておいてください。
+　・床
+　　　掃除機をかけ、「フロアクイックル」でみがいて下さい
+
+-------------------------------------------"
     end
     redirect "#{@path_prefix}/"
   end
@@ -196,7 +290,9 @@ class MainApp < Sinatra::Base
     @id = group[0].id
     Pony.mail :to => params[:email],
               :from => 'hirai@mm.media.kyoto-u.ac.jp',
-              :subject => '登録完了しました。'
+              :subject => '【' + @name + '】登録完了しました。',
+              :body => params[:name] + "さん
+" + @name + "へのユーザー登録が完了しました。"
     redirect "#{@path_prefix}/config/" + params[:id]
   end
 
@@ -221,7 +317,7 @@ class MainApp < Sinatra::Base
         group[0].save
       end
     end
-    redirect "#{@path_prefix}config/" + params[:groupid]
+    redirect "#{@path_prefix}/config/" + params[:groupid]
   end
 
   #下と順番を変更
@@ -252,7 +348,7 @@ class MainApp < Sinatra::Base
     group = Group.where(:id => params[:groupid])
     group[0].noworder = params[:pointid]
     group[0].save
-    redirect "#{@path_prefix}config/" + params[:groupid]
+    redirect "#{@path_prefix}/config/" + params[:groupid]
   end
 
   #ユーザーの削除
@@ -267,7 +363,7 @@ class MainApp < Sinatra::Base
         user.save
       end
     end
-    redirect "#{@path_prefix}config/" + params[:groupid]
+    redirect "#{@path_prefix}/config/" + params[:groupid]
   end
 
   #グループの削除

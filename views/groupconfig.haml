@@ -2,7 +2,7 @@
   .navbar-inner
     .container-fluid
       %a.brand{:href => "#{@path_prefix}/"}
-        お掃除
+        当番表
       .nav-collapse.collapse
         %ul.nav
           - @idlist.each_with_index do |id,i|
@@ -68,7 +68,7 @@
         %label{:for => "name"} 名前:
         %input{:name => "name", :type => "text", :value => ""}
       %p
-        %label{:for => "name"} email:
+        %label{:for => "name"} email(※可能な限りmmのアドレスで登録してください！):
         %input{:name => "email", :type => "text", :value => ""}
       %p
         %input{:type => "submit", :class=>"btn btn-default", :value => "登録"}

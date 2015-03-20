@@ -2,7 +2,7 @@
   .navbar-inner
     .container-fluid
       %a.brand{:href => "#{@path_prefix}/"}
-        お掃除
+        当番表
       .nav-collapse.collapse
         %ul.nav
           - @idlist.each_with_index do |id,i|
@@ -11,7 +11,8 @@
                 #{@minilist[i]}
 .row-fluid
   .span6
-    %h1 お掃除スクリプト
+    %h1 美濃研究室当番表
+    %br
     - @grouplist.each_with_index  do |user,i|
       %h2 #{@namelist[i]}
       - if @nillist[i] == true
@@ -28,29 +29,29 @@
           %tbody
             - if @interlist[i] == 1
               %tr{:class => "success"}
-                %td #{@daylist[0]}  ~ #{@daylist[1]}
+                %td #{@daylist[i][0]}  ~ #{@daylist[i][1]}
                 %td
                   = user[0].name
                 %td 完了
-            - elsif @interlist[i] == 2
+            - elsif @interlist[i] > 1
               %tr{:class => "alert-danger"}
-                %td #{@daylist[0]}  ~ #{@daylist[1]}
+                %td #{@daylist[i][0]}  ~ #{@daylist[i][1]}
                 %td
                   = user[0].name
                 %td  遅延
             - else
               %tr{:class => "info"}
-                %td #{@daylist[0]}  ~ #{@daylist[1]}
+                %td #{@daylist[i][0]}  ~ #{@daylist[i][1]}
                 %td
                   = user[0].name
                 %td 未完了
             %tr
-              %td #{@daylist[1]} ~ #{@daylist[2]}
+              %td #{@daylist[i][1]} ~ #{@daylist[i][2]}
               %td
                 = user[1].name
               %td 次回
             %tr
-              %td #{@daylist[2]} ~ #{@daylist[3]}
+              %td #{@daylist[i][2]} ~ #{@daylist[i][3]}
               %td
                 = user[2].name
               %td 次々回
