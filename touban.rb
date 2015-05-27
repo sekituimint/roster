@@ -117,7 +117,7 @@ class MainApp < Sinatra::Base
     end
     if group[0].interval == 0
       group[0].interval = 1
-    elsif group[0].interval == 2
+    elsif group[0].interval > 1
       group[0].interval = 0
       group[0].noworder += 1
       users = User.where(:groupid => group[0].id.to_s).sort_by{|user| user.order}
