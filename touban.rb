@@ -355,12 +355,15 @@ R412の掃除---------------------------------
   get '/config/delete/:groupid/:deleteid' do
     group = Group.where(:id => params[:groupid])
     deleteuser = User.where(:groupid => params[:groupid],:order => params[:deleteid])
-    deleteuser[0].destroy
-    users = User.where(:groupid => params[:groupid])
-    users.each do  |user|
-      if user.order > params[:deleteid].to_i
-        user.order = user.order - 1
-        user.save
+    if group[0].noworder != params[:deleteid].to_i
+      byebug
+      deleteuser[0].destroy
+      users = User.where(:groupid => params[:groupid])
+      users.each do  |user|
+        if user.order > params[:deleteid].to_i
+          user.order = user.order - 1
+          user.save
+        end
       end
     end
     redirect "#{@path_prefix}/config/" + params[:groupid]
